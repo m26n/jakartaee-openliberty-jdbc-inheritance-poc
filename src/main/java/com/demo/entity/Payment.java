@@ -1,13 +1,13 @@
 package com.demo.entity;
 
-import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.persistence.Table;
-import jakarta.persistence.NamedQuery;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
@@ -24,6 +24,10 @@ public abstract class Payment {
     @Column(name="amount")
     private Double amount;
 
+    @ManyToOne
+    @JoinColumn(name="id", nullable=false)
+    private Order order;
+
     public Payment() {
     }
 
@@ -34,6 +38,12 @@ public abstract class Payment {
     public Payment(Double amount, Long id) {
         this.amount = amount;
         this.id = id;
+    }
+
+    public Payment(Long id, Double amount, Order order) {
+        this.id = id;
+        this.amount = amount;
+        this.order = order;
     }
 
     public Long getId() {
@@ -50,6 +60,14 @@ public abstract class Payment {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order orderId) {
+        this.order = orderId;
     }
 
     @Override

@@ -23,11 +23,11 @@ public class PaymentDao {
         em.persist(payment);
     }
 
-    public PaypalPayment findPaypalPayment(int id) {
+    public PaypalPayment findPaypalPayment(Long id) {
         return em.find(PaypalPayment.class, id);
     }
 
-    public CreditCardPayment findCreditCardPayment(int id) {
+    public CreditCardPayment findCreditCardPayment(Long id) {
         return em.find(CreditCardPayment.class, id);
     }
 

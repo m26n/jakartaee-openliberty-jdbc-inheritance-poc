@@ -5,9 +5,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+import java.util.List;
 
 @Entity
+@Table(name = "orders")
+@NamedQuery(name = "Order.findAll", query = "SELECT o FROM Order o")
 public class Order {
 
     @Id
@@ -15,17 +21,24 @@ public class Order {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    private Payment payment;
+    @Column(name = "order_name")
+    private String orderName;
+
+    @OneToMany(mappedBy = "order")
+    private List<Payment> payment;
 
     public Order() {
     }
 
-    public Order(Payment payment) {
+    public Order(String orderName) {
+        this.orderName = orderName;
+    }
+
+    public Order(List<Payment> payment) {
         this.payment = payment;
     }
 
-    public Order(Long id, Payment payment) {
+    public Order(Long id, List<Payment> payment) {
         this.id = id;
         this.payment = payment;
     }
@@ -38,11 +51,11 @@ public class Order {
         this.id = id;
     }
 
-    public Payment getPayment() {
+    public List<Payment> getPayment() {
         return payment;
     }
 
-    public void setPayment(Payment payment) {
+    public void setPayment(List<Payment> payment) {
         this.payment = payment;
     }
 }
