@@ -6,7 +6,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "paypal_payment")
+@Table(name = "paypal_payments")
 @NamedQuery(name = "PaypalPayment.findAll", query = "SELECT e FROM PaypalPayment e")
 public class PaypalPayment extends Payment {
     @Column(name = "paypal_id")

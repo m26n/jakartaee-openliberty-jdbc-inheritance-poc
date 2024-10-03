@@ -1,8 +1,6 @@
 package com.demo.dao;
 
 import com.demo.entity.Order;
-import com.demo.entity.Payment;
-import com.demo.entity.PaypalPayment;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -10,7 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import java.util.List;
 
 @RequestScoped
-public class OrderDao {
+public class OrderRepository {
 
     @PersistenceContext(name = "jpa-unit")
     private EntityManager em;

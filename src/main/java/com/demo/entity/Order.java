@@ -51,6 +51,14 @@ public class Order {
         this.id = id;
     }
 
+    public String getOrderName() {
+        return orderName;
+    }
+
+    public void setOrderName(String orderName) {
+        this.orderName = orderName;
+    }
+
     public List<Payment> getPayment() {
         return payment;
     }

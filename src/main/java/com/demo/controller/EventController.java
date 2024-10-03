@@ -1,33 +1,33 @@
-package com.demo.resource;
+package com.demo.controller;
 
-import com.demo.dao.EventDao;
+import com.demo.dao.EventRepository;
 import com.demo.entity.Event;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
 import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
 
 @RequestScoped
 @Path("events")
-public class EventResource {
+public class EventController {
 
     @Inject
-    private EventDao eventDAO;
+    private EventRepository eventRepository;
 
     /**
      * This method creates a new event from the submitted data (name, time and
@@ -39,11 +39,11 @@ public class EventResource {
     public Response addNewEvent(@FormParam("name") String name,
                                 @FormParam("time") String time, @FormParam("location") String location) {
         Event newEvent = new Event(name, location, time);
-        if (!eventDAO.findEvent(name, location, time).isEmpty()) {
+        if (!eventRepository.findEvent(name, location, time).isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Event already exists").build();
         }
-        eventDAO.createEvent(newEvent);
+        eventRepository.createEvent(newEvent);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -58,12 +58,12 @@ public class EventResource {
     public Response updateEvent(@FormParam("name") String name,
                                 @FormParam("time") String time, @FormParam("location") String location,
                                 @PathParam("id") int id) {
-        Event prevEvent = eventDAO.readEvent(id);
+        Event prevEvent = eventRepository.readEvent(id);
         if (prevEvent == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Event does not exist").build();
         }
-        if (!eventDAO.findEvent(name, location, time).isEmpty()) {
+        if (!eventRepository.findEvent(name, location, time).isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Event already exists").build();
         }
@@ -71,7 +71,7 @@ public class EventResource {
         prevEvent.setLocation(location);
         prevEvent.setTime(time);
 
-        eventDAO.updateEvent(prevEvent);
+        eventRepository.updateEvent(prevEvent);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -82,12 +82,12 @@ public class EventResource {
     @Path("{id}")
     @Transactional
     public Response deleteEvent(@PathParam("id") int id) {
-        Event event = eventDAO.readEvent(id);
+        Event event = eventRepository.readEvent(id);
         if (event == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Event does not exist").build();
         }
-        eventDAO.deleteEvent(event);
+        eventRepository.deleteEvent(event);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -100,7 +100,7 @@ public class EventResource {
     @Transactional
     public JsonObject getEvent(@PathParam("id") int eventId) {
         JsonObjectBuilder builder = Json.createObjectBuilder();
-        Event event = eventDAO.readEvent(eventId);
+        Event event = eventRepository.readEvent(eventId);
         if (event != null) {
             builder.add("name", event.getName()).add("time", event.getTime())
                     .add("location", event.getLocation()).add("id", event.getId());
@@ -117,7 +117,7 @@ public class EventResource {
     public JsonArray getEvents() {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         JsonArrayBuilder finalArray = Json.createArrayBuilder();
-        for (Event event : eventDAO.readAllEvents()) {
+        for (Event event : eventRepository.readAllEvents()) {
             builder.add("name", event.getName()).add("time", event.getTime())
                     .add("location", event.getLocation()).add("id", event.getId());
             finalArray.add(builder.build());

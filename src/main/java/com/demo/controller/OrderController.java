@@ -1,7 +1,7 @@
-package com.demo.resource;
+package com.demo.controller;
 
-import com.demo.dao.OrderDao;
-import com.demo.dao.PaymentDao;
+import com.demo.dao.OrderRepository;
+import com.demo.dao.PaymentRepository;
 import com.demo.entity.Order;
 import com.demo.entity.Payment;
 import com.demo.entity.PaypalPayment;
@@ -26,23 +26,25 @@ import java.util.List;
 
 @RequestScoped
 @Path("orders")
-public class OrderResource {
+public class OrderController {
     @Inject
-    private OrderDao dao;
+    private OrderRepository dao;
 
     @Inject
-    private PaymentDao paymentDao;
+    private PaymentRepository paymentRepository;
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Transactional
-    public Response addPaypalPayment(@FormParam("payments") List<Long> paymentIds, @FormParam("orderName") String name) {
+    public Response addOrder(@FormParam("payments") List<Long> paymentIds, @FormParam("orderName") String name) {
         Order order = new Order(name);
         order.setPayment(new ArrayList<>());
+
         for (Long paymentId : paymentIds) {
-            Payment payment = paymentDao.findPaypalPayment(paymentId);
+            Payment payment = paymentRepository.findPaypalPayment(paymentId);
             order.getPayment().add(payment);
         }
+
         dao.createOrder(order);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
@@ -50,11 +52,32 @@ public class OrderResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public JsonArray getPaypalPayments() {
+    public JsonArray getOrders() {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         JsonArrayBuilder finalArray = Json.createArrayBuilder();
-        for (Order payment : dao.readAllOrders()) {
-            builder.add("amount", payment.getId());
+
+        for (Order order : dao.readAllOrders()) {
+            builder
+                    .add("id", order.getId())
+                    .add("name", order.getOrderName());
+
+            JsonArrayBuilder paymentsArray = Json.createArrayBuilder();
+
+            for (Payment payment : order.getPayment()) {
+                JsonObjectBuilder builderPayments = Json.createObjectBuilder();
+                builderPayments
+                        .add("id", payment.getId())
+                        .add("paypalId", payment.getAmount());
+
+                if (payment instanceof PaypalPayment) {
+                    builderPayments
+                            .add("paypalId", ((PaypalPayment) payment).getPaypalId());
+                }
+
+                paymentsArray.add(builderPayments);
+            }
+
+            builder.add("payments", paymentsArray);
             finalArray.add(builder.build());
         }
 

@@ -1,15 +1,14 @@
 package com.demo.dao;
 
-import java.util.List;
-
 import com.demo.entity.Event;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-import jakarta.enterprise.context.RequestScoped;
+import java.util.List;
 
 @RequestScoped
-public class EventDao {
+public class EventRepository {
 
     @PersistenceContext(name = "jpa-unit")
     private EntityManager em;

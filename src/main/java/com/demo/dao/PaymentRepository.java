@@ -1,7 +1,6 @@
 package com.demo.dao;
 
-import com.demo.entity.CreditCardPayment;
-import com.demo.entity.Payment;
+import com.demo.entity.CreditCard;
 import com.demo.entity.PaypalPayment;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
@@ -10,12 +9,12 @@ import jakarta.persistence.PersistenceContext;
 import java.util.List;
 
 @RequestScoped
-public class PaymentDao {
+public class PaymentRepository {
 
     @PersistenceContext(name = "jpa-unit")
     private EntityManager em;
 
-    public void createCreditCardPayment(CreditCardPayment payment) {
+    public void createCreditCardPayment(CreditCard payment) {
         em.persist(payment);
     }
 
@@ -27,15 +26,15 @@ public class PaymentDao {
         return em.find(PaypalPayment.class, id);
     }
 
-    public CreditCardPayment findCreditCardPayment(Long id) {
-        return em.find(CreditCardPayment.class, id);
+    public CreditCard findCreditCardPayment(Long id) {
+        return em.find(CreditCard.class, id);
     }
 
     public List<PaypalPayment> readAllPaypalPayments() {
         return em.createNamedQuery("PaypalPayment.findAll", PaypalPayment.class).getResultList();
     }
 
-    public List<CreditCardPayment> readAllCreditCardPayments() {
-        return em.createNamedQuery("CreditCardPayment.findAll", CreditCardPayment.class).getResultList();
+    public List<CreditCard> readAllCreditCardPayments() {
+        return em.createNamedQuery("CreditCardPayment.findAll", CreditCard.class).getResultList();
     }
 }

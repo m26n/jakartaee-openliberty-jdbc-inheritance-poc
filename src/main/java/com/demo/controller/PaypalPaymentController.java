@@ -1,7 +1,7 @@
-package com.demo.resource;
+package com.demo.controller;
 
-import com.demo.dao.PaymentDao;
-import com.demo.entity.CreditCardPayment;
+import com.demo.dao.PaymentRepository;
+import com.demo.entity.PaypalPayment;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
@@ -19,29 +19,32 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @RequestScoped
-@Path("credit-card-payments")
-public class CreditCardPaymentResource {
+@Path("paypal-payments")
+public class PaypalPaymentController {
     @Inject
-    private PaymentDao dao;
+    private PaymentRepository dao;
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Transactional
-    public Response addCreditCardPayment(@FormParam("amount") Double amount, @FormParam("cardNumber") String cardNumber) {
-        CreditCardPayment payment = new CreditCardPayment(amount, cardNumber);
+    public Response addPaypalPayment(@FormParam("amount") Double amount, @FormParam("paypalId") String paypalId) {
+        PaypalPayment payment = new PaypalPayment(amount, paypalId);
 
-        dao.createCreditCardPayment(payment);
+        dao.createPaypalPayment(payment);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public JsonArray getCreditCardPayments() {
+    public JsonArray getPaypalPayments() {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         JsonArrayBuilder finalArray = Json.createArrayBuilder();
-        for (CreditCardPayment payment : dao.readAllCreditCardPayments()) {
-            builder.add("amount", payment.getAmount()).add("cardNumber", payment.getCardNumber());
+        for (PaypalPayment payment : dao.readAllPaypalPayments()) {
+            builder
+                    .add("id", payment.getId())
+                    .add("amount", payment.getAmount())
+                    .add("paypalId", payment.getPaypalId());
             finalArray.add(builder.build());
         }
 

@@ -1,7 +1,7 @@
-package com.demo.resource;
+package com.demo.controller;
 
-import com.demo.dao.PaymentDao;
-import com.demo.entity.PaypalPayment;
+import com.demo.dao.PaymentRepository;
+import com.demo.entity.CreditCard;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
@@ -19,29 +19,29 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @RequestScoped
-@Path("paypal-payments")
-public class PaypalPaymentResource {
+@Path("credit-card-payments")
+public class CreditCardPaymentController {
     @Inject
-    private PaymentDao dao;
+    private PaymentRepository dao;
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Transactional
-    public Response addPaypalPayment(@FormParam("amount") Double amount, @FormParam("paypalId") String paypalId) {
-        PaypalPayment payment = new PaypalPayment(amount, paypalId);
-
-        dao.createPaypalPayment(payment);
+    public Response addCreditCardPayment(@FormParam("amount") Double amount, @FormParam("cardNumber") String cardNumber) {
+        CreditCard payment = new CreditCard(amount, cardNumber);
+        dao.createCreditCardPayment(payment);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public JsonArray getPaypalPayments() {
+    public JsonArray getCreditCardPayments() {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         JsonArrayBuilder finalArray = Json.createArrayBuilder();
-        for (PaypalPayment payment : dao.readAllPaypalPayments()) {
-            builder.add("amount", payment.getAmount()).add("cardNumber", payment.getPaypalId());
+
+        for (CreditCard payment : dao.readAllCreditCardPayments()) {
+            builder.add("amount", payment.getAmount()).add("cardNumber", payment.getCardNumber());
             finalArray.add(builder.build());
         }
 

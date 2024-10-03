@@ -5,24 +5,24 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "credit_card_payment")
-@NamedQuery(name = "CreditCardPayment.findAll", query = "SELECT e FROM CreditCardPayment e")
-public class CreditCardPayment extends Payment {
+@Table(name = "credit_card_payments")
+@NamedQuery(name = "CreditCardPayment.findAll", query = "SELECT e FROM CreditCard e")
+public class CreditCard extends Payment {
     private String cardNumber;
 
-    public CreditCardPayment() {
+    public CreditCard() {
     }
 
-    public CreditCardPayment(String cardNumber) {
+    public CreditCard(String cardNumber) {
         this.cardNumber = cardNumber;
     }
 
-    public CreditCardPayment(Double amount, String cardNumber) {
+    public CreditCard(Double amount, String cardNumber) {
         super(amount);
         this.cardNumber = cardNumber;
     }
 
-    public CreditCardPayment(Double amount, Long id, String cardNumber) {
+    public CreditCard(Double amount, Long id, String cardNumber) {
         super(amount, id);
         this.cardNumber = cardNumber;
     }
