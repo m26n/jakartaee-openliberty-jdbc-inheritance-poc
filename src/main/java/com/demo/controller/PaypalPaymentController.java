@@ -1,7 +1,7 @@
 package com.demo.controller;
 
-import com.demo.dao.PaymentRepository;
 import com.demo.entity.PaypalPayment;
+import com.demo.repository.PaymentRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
@@ -29,7 +29,6 @@ public class PaypalPaymentController {
     @Transactional
     public Response addPaypalPayment(@FormParam("amount") Double amount, @FormParam("paypalId") String paypalId) {
         PaypalPayment payment = new PaypalPayment(amount, paypalId);
-
         dao.createPaypalPayment(payment);
         return Response.status(Response.Status.NO_CONTENT).build();
     }

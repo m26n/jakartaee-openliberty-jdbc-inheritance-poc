@@ -1,7 +1,7 @@
 package com.demo.controller;
 
-import com.demo.dao.EventRepository;
 import com.demo.entity.Event;
+import com.demo.repository.EventRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.json.Json;

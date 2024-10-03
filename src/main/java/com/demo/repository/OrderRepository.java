@@ -1,4 +1,4 @@
-package com.demo.dao;
+package com.demo.repository;
 
 import com.demo.entity.Order;
 import jakarta.enterprise.context.RequestScoped;

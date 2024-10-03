@@ -8,12 +8,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
 @NamedQuery(name = "Order.findAll", query = "SELECT o FROM Order o")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
 
     @Id
@@ -27,43 +33,7 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<Payment> payment;
 
-    public Order() {
-    }
-
     public Order(String orderName) {
         this.orderName = orderName;
-    }
-
-    public Order(List<Payment> payment) {
-        this.payment = payment;
-    }
-
-    public Order(Long id, List<Payment> payment) {
-        this.id = id;
-        this.payment = payment;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getOrderName() {
-        return orderName;
-    }
-
-    public void setOrderName(String orderName) {
-        this.orderName = orderName;
-    }
-
-    public List<Payment> getPayment() {
-        return payment;
-    }
-
-    public void setPayment(List<Payment> payment) {
-        this.payment = payment;
     }
 }

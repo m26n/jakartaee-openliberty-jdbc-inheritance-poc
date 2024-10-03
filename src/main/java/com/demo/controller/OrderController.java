@@ -1,10 +1,10 @@
 package com.demo.controller;
 
-import com.demo.dao.OrderRepository;
-import com.demo.dao.PaymentRepository;
 import com.demo.entity.Order;
 import com.demo.entity.Payment;
 import com.demo.entity.PaypalPayment;
+import com.demo.repository.OrderRepository;
+import com.demo.repository.PaymentRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.json.Json;

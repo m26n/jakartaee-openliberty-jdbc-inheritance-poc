@@ -1,4 +1,4 @@
-package com.demo.dao;
+package com.demo.repository;
 
 import com.demo.entity.CreditCard;
 import com.demo.entity.PaypalPayment;

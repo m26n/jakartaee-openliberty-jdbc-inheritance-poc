@@ -1,7 +1,7 @@
 package com.demo.controller;
 
-import com.demo.dao.PaymentRepository;
 import com.demo.entity.CreditCard;
+import com.demo.repository.PaymentRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
